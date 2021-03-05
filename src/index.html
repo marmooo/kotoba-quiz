@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ja" class="bg-white">
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-142997649-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-142997649-1');
+    </script>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ことばクイズ</title>
+    <meta name="description" content="画像と発音からことばを当てるクイズです。手書き練習にもぴったり。">
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/kotoba-quiz/sw.js');
+        });
+      }
+    </script>
+    <script async src="https://cse.google.com/cse.js?cx=partner-pub-6459713332128733:7164795498"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/kotoba-quiz/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/kotoba-quiz/favicon/favicon-48x48.png">
+    <link rel="manifest" href="/kotoba-quiz/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/kotoba-quiz/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/kotoba-quiz/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="/kotoba-quiz/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+    <style>
+      canvas { width:105px; height:140px; border:solid 1px; }
+      .eraser { display:block; margin:auto; cursor:pointer; }
+      .card-header.ruby { padding: 1rem 1.25rem .5rem 1.25rem }
+      html[data-theme="dark"] { filter: invert(1) hue-rotate(180deg) }
+      html[data-theme="dark"] #gophers { filter: invert(1) hue-rotate(180deg); }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand navbar-light">
+        <div class="container">
+          <a class="navbar-brand" href="/kotoba-quiz/">ことばクイズ</a>
+          <div class="navbar-nav">
+            <select id="grade" class="ml-1 form-control form-control-sm" aria-label="学年">
+              <option selected>ひらがな</option>
+              <option>カタカナ</option>
+            </select>
+            <button title="音声を自動再生" onclick="toggleVoice(this)" id="voice" class="ml-2 close">🔊</button>
+            <button title="ダークモード切替" onclick="toggleDarkMode()" class="ml-2 close">🌓</button>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="container">
+      <noscript>
+        <div class="alert alert-info text-center">JavaScript を ON にしてください</div>
+      </noscript>
+      <p><ruby>画像<rp>(</rp><rt>がぞう</rt><rp>)</rp></ruby>から<ruby>英単語<rp>(</rp><rt>えいたんご</rt><rp>)</rp></ruby>を<ruby>当<rp>(</rp><rt>あ</rt><rp>)</rp></ruby>てるクイズです。
+        ｢これなあに？｣を<ruby>押<rp>(</rp><rt>お</rt><rp>)</rp></ruby>すとランダムにクイズを<ruby>出<rp>(</rp><rt>だ</rt><rp>)</rp></ruby>します。
+      </p>
+      <div class="text-center">
+        <div class="d-flex flex-wrap justify-content-center">
+          <form id="cse-search-box-form-id" class="pb-1">
+            <input type="hidden" value="学校" id="cse-search-input-box-id">
+            <input type="submit" value="これなあに？" class="btn btn-primary btn-lg">
+            <div>
+              <img src="https://www.google.com/images/poweredby_transparent/poweredby_FFFFFF.gif" alt="Google">
+              Custom Search
+            </div>
+          </form>
+          <div>
+            <button onclick="showAnswer()" class="btn btn-secondary btn-lg">こたえ</button>
+          </div>
+        </div>
+        <div id="answer" class="d-none alert alert-info h5">ゴファー</div>
+      </div>
+      <div>
+        <div>ヒント (
+          <span id="wordLength">4</span><ruby>文字<rp>(</rp><rt>もじ</rt><rp>)</rp></ruby>):
+          <span id="reply" class="h5"></span>
+        </div>
+        <div id="tegakiPanel" class="d-flex justify-content-start pt-3 overflow-auto">
+          <div>
+            <canvas width="105" height="140"></canvas>
+            <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
+          </div>
+          <div>
+            <canvas width="105" height="140"></canvas>
+            <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
+          </div>
+          <div>
+            <canvas width="105" height="140"></canvas>
+            <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
+          </div>
+          <div>
+            <canvas width="105" height="140"></canvas>
+            <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
+          </div>
+        </div>
+      </div>
+      <div id="gophers" class="text-center pt-4">
+        <img src="img/animated-gopher.svg" width="128" height="128" alt="animated-gopher">
+        <img src="img/witch-cooking.png" width="119" height="128" alt="witch-cooking">
+        <img src="img/dancing-gopher.gif" width="128" height="128" alt="dancing-gopher">
+        <img src="img/hiking.png" width="158" height="128" alt="hiking">
+        <img src="img/surfing-js.png" width="176" height="128" alt="surfing-js">
+        <img src="img/witch-learning.png" width="170" height="128" alt="witch-learning">
+        <img src="img/umbrella.png" width="186" height="128" alt="umbrella">
+        <img src="img/messenger-red-letter.png" width="121" height="128" alt="messenger-red-letter">
+        <img src="img/robin-hood.png" width="95" height="128" alt="robin-hood">
+        <img src="img/gamer.png" width="122" height="128" alt="gamer">
+      </div>
+      <div class="gcse-searchresults-only" data-defaultToImageSearch="true"></div>
+      <template id="tegaki-box">
+        <style>
+          canvas { width:105px; height:140px; border:solid 1px; }
+          .eraser { display:block; margin:auto; cursor:pointer; }
+        </style>
+        <div>
+          <canvas width="105" height="140"></canvas>
+          <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
+        </div>
+      </template>
+    </main>
+    <footer class="pt-4 alert text-center">
+      <div class="pt-3">
+        <a class="px-1" href="/">Home</a>
+        <a class="px-1" href="/terms/">Terms</a>
+        <a class="px-1" href="https://github.com/marmooo/kotoba-quiz">Contact</a>
+      </div>
+      <div class="text-muted">&copy; <a href="https://github.com/marmooo">marmooo</a>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
+    <script src="index.js"></script>
+  </body>
+</html>
+
