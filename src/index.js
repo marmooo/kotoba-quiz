@@ -224,7 +224,9 @@ function changeProblem() {
   answer = word;
   hideAnswer();
   document.getElementById('wordLength').innerText = answer.length;
-  loopVoice();
+  if (localStorage.getItem('voice') == 1) {
+    loopVoice();
+  }
 }
 
 function initProblems() {
