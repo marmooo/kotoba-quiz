@@ -7,7 +7,7 @@ let answer = 'ゴファー';
 let firstRun = true;
 let canvasCache = document.createElement('canvas').getContext('2d');
 let model;
-let englishVoices = [];
+let japaneseVoices = [];
 
 function loadConfig() {
   if (localStorage.getItem('darkMode') == 1) {
@@ -31,7 +31,6 @@ function toggleDarkMode() {
 }
 
 function toggleVoice(obj) {
-  speechSynthesis.cancel();
   if (localStorage.getItem('voice') == 1) {
     localStorage.setItem('voice', 0);
     document.getElementById('voiceOn').classList.add('d-none');
@@ -59,14 +58,15 @@ function loadVoices() {
     }
   });
   allVoicesObtained.then(voices => {
-    englishVoices = voices.filter(voice => voice.lang == 'ja-JP' );
+    japaneseVoices = voices.filter(voice => voice.lang == 'ja-JP' );
   });
 }
 loadVoices();
 
 function loopVoice() {
+  speechSynthesis.cancel();
   var msg = new SpeechSynthesisUtterance(answer);
-  msg.voice = englishVoices[Math.floor(Math.random() * englishVoices.length)];
+  msg.voice = japaneseVoices[Math.floor(Math.random() * japaneseVoices.length)];
   msg.lang = 'ja-JP';
   for (var i=0; i<5; i++) {
     speechSynthesis.speak(msg);
@@ -224,7 +224,6 @@ function changeProblem() {
   answer = word;
   hideAnswer();
   document.getElementById('wordLength').innerText = answer.length;
-  speechSynthesis.cancel();
   loopVoice();
 }
 
