@@ -23,7 +23,7 @@ function unlockAudio(){correctAudio.volume=0;correctAudio.play();correctAudio.pa
 function getRandomInt(min,max){min=Math.ceil(min);max=Math.floor(max);return Math.floor(Math.random()*(max-min)+min);}
 function hideAnswer(){var node=document.getElementById('answer');node.classList.add('d-none');}
 function showAnswer(){var node=document.getElementById('answer');node.classList.remove('d-none');node.innerText=answer;}
-function changeProblem(){var[word,query]=problems[getRandomInt(0,problems.length-1)];var input=document.getElementById('cse-search-input-box-id');input.value=query;answer=word;hideAnswer();document.getElementById('wordLength').innerText=answer.length;loopVoice();}
+function changeProblem(){var[word,query]=problems[getRandomInt(0,problems.length-1)];var input=document.getElementById('cse-search-input-box-id');input.value=query;answer=word;hideAnswer();document.getElementById('wordLength').innerText=answer.length;if(localStorage.getItem('voice')==1){loopVoice();}}
 function initProblems(){const index=document.getElementById('grade').selectedIndex;const grade=(index==0)?'hira':'kana';fetch(grade+'.lst').then(response=>response.text()).then(tsv=>{tsv.split('\n').forEach(line=>{const[word,query]=line.split("\t");problems.push([word,query]);});});}
 initProblems();function searchByGoogle(event){event.preventDefault();var input=document.getElementById('cse-search-input-box-id');var element=google.search.cse.element.getElement('searchresults-only0');changeProblem();if(input.value==''){element.clearAllResults();}else{element.execute(input.value);}
 setTegakiPanel();if(firstRun){const gophers=document.getElementById('gophers');while(gophers.firstChild){gophers.removeChild(gophers.lastChild);}
