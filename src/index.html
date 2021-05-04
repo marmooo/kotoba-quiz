@@ -35,7 +35,8 @@
       canvas { width:140px; height:140px; border:solid 1px; }
       .eraser { display:block; margin:auto; cursor:pointer; }
       .card-header.ruby { padding: 1rem 1.25rem .5rem 1.25rem }
-      html[data-theme="dark"] { filter: invert(1) hue-rotate(180deg); background-color:black; }
+      html[data-theme="dark"] { filter: invert(1) hue-rotate(180deg); }
+      @-moz-document url-prefix() { html[data-theme="dark"] { background-color:black; } }
       html[data-theme="dark"] #gophers { filter: invert(1) hue-rotate(180deg); }
     </style>
   </head>
