@@ -35,6 +35,7 @@ function toggleVoice(obj) {
     localStorage.setItem('voice', 0);
     document.getElementById('voiceOn').classList.add('d-none');
     document.getElementById('voiceOff').classList.remove('d-none');
+    speechSynthesis.cancel();
   } else {
     localStorage.setItem('voice', 1);
     document.getElementById('voiceOn').classList.remove('d-none');
@@ -226,6 +227,8 @@ function changeProblem() {
   document.getElementById('wordLength').innerText = answer.length;
   if (localStorage.getItem('voice') == 1) {
     loopVoice();
+  } else {
+    speechSynthesis.cancel();
   }
 }
 
