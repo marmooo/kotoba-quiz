@@ -232,17 +232,17 @@ function changeProblem() {
   }
 }
 
-function initProblems() {
-  const index = document.getElementById('grade').selectedIndex;
+function changeGrade() {
+  const index = document.getElementById('levelOption').selectedIndex;
   const grade = (index == 0) ? 'hira' : 'kana';
   fetch(grade + '.lst').then(response => response.text()).then(tsv => {
+    problems = [];
     tsv.split('\n').forEach(line => {
       const [word, query] = line.split("\t");
       problems.push([word, query]);
     });
   });
 }
-initProblems();
 
 function searchByGoogle(event) {
   event.preventDefault();
@@ -295,4 +295,9 @@ var canvases = tegakiPanel.getElementsByTagName('canvas');
 (async() => {
   model = await tf.loadLayersModel('model/model.json');
 })();
+
+document.getElementById('levelOption').addEventListener('change', function() {
+  changeGrade();
+});
+changeGrade();
 
