@@ -1,4 +1,4 @@
-var CACHE_NAME = '2021-05-04 17:30';
+var CACHE_NAME = '2021-05-18 09:20';
 var urlsToCache = [
   '/kotoba-quiz/',
   '/kotoba-quiz/hira.lst',
@@ -8,7 +8,7 @@ var urlsToCache = [
   '/kotoba-quiz/model/model.json',
   '/kotoba-quiz/model/group1-shard1of1.bin',
   '/kotoba-quiz/mp3/correct3.mp3',
-  'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css',
+  'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css',
   'https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js',
   'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js',
 ];
