@@ -1,5 +1,5 @@
-const letters = Array.from('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵー・、。');
-
+const tegakiPanel = document.getElementById('tegakiPanel');
+let canvases = [...tegakiPanel.getElementsByTagName('canvas')];
 const correctAudio = new Audio('/kotoba-quiz/mp3/correct3.mp3');
 let pads = [];
 let problems = [];
@@ -88,10 +88,7 @@ function setTegakiPanel() {
 
 function showPredictResult(canvas, result) {
   const tegakiPanel = document.getElementById('tegakiPanel');
-  let canvases;
-  if (firstRun) {
-    canvases = [...tegakiPanel.getElementsByTagName('canvas')];
-  } else {
+  if (!firstRun) {
     const boxes = tegakiPanel.getElementsByTagName('tegaki-box');
     canvases = [...boxes].map(box => box.shadowRoot.querySelector('canvas'));
   }
@@ -132,12 +129,7 @@ function initSignaturePad(canvas) {
     minDistance: 0,
   });
   pad.onEnd = function() {
-    var result = predict(this._canvas);
-    var reply = showPredictResult(this._canvas, result);
-    console.log(reply, answer);
-    if (reply == answer) {
-      correctAudio.play();
-    }
+    predict(this._canvas);
   }
   return pad;
 }
@@ -184,13 +176,9 @@ function top2(arr) {
 }
 
 function predict(canvas) {
-  // 上位2件までに入っていれば OK (bymerge)
-  var imageData = getImageData(canvas);
-  var accuracyScores = getAccuracyScores(imageData);
-  var [max1, max2] = top2(accuracyScores);
-  var letter1 = letters[accuracyScores.indexOf(max1)]
-  var letter2 = letters[accuracyScores.indexOf(max2)];
-  return [letter1, letter2];
+  const imageData = getImageData(canvas);
+  const pos = canvases.indexOf(canvas);
+  worker.postMessage({ imageData:imageData, pos:pos });
 }
 
 function unlockAudio() {
@@ -281,9 +269,7 @@ customElements.define('tegaki-box', class extends HTMLElement {
   }
 });
 
-var tegakiPanel = document.getElementById('tegakiPanel');
-var canvases = tegakiPanel.getElementsByTagName('canvas');
-[...canvases].forEach(canvas => {
+canvases.forEach(canvas => {
   const pad = initSignaturePad(canvas);
   pads.push(pad);
   canvas.parentNode.querySelector('.eraser').onclick = function() {
@@ -292,12 +278,16 @@ var canvases = tegakiPanel.getElementsByTagName('canvas');
   };
 });
 
-(async() => {
-  model = await tf.loadLayersModel('model/model.json');
-})();
-
 document.getElementById('levelOption').addEventListener('change', function() {
   changeGrade();
 });
 changeGrade();
+
+const worker = new Worker('worker.js');
+worker.addEventListener('message', function(e) {
+  var reply = showPredictResult(canvases[e.data.pos], e.data.result);
+  if (reply == answer) {
+    correctAudio.play();
+  }
+});
 
