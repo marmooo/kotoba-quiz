@@ -8,6 +8,7 @@ var urlsToCache = [
   '/kotoba-quiz/model/model.json',
   '/kotoba-quiz/model/group1-shard1of1.bin',
   '/kotoba-quiz/mp3/correct3.mp3',
+  '/kotoba-quiz/favicon/original.svg',
   '/kotoba-quiz/signature_pad.umd.min.js',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
   'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js',
