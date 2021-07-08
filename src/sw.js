@@ -1,4 +1,4 @@
-var CACHE_NAME = '2021-06-24 07:06';
+var CACHE_NAME = '2021-07-08 23:10';
 var urlsToCache = [
   '/kotoba-quiz/',
   '/kotoba-quiz/hira.lst',

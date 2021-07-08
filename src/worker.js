@@ -26,7 +26,7 @@ function top2(arr) {
 
 function predict(imageData) {
   const scores = getAccuracyScores(imageData);
-  var [max1, max2] = top2(scores);
+  var [max1, max2] = top2(scores.slice(0, 235));
   var letter1 = letters[scores.indexOf(max1)]
   var letter2 = letters[scores.indexOf(max2)];
   return [letter1, letter2];
