@@ -179,7 +179,12 @@ function showAnswer() {
   node.innerText = answer;
 }
 
-function changeProblem() {
+function nextProblem() {
+  const searchButton = document.getElementById("searchButton");
+  searchButton.disabled = true;
+  setTimeout(function () {
+    searchButton.disabled = false;
+  }, 2000);
   const [word, query] = problems[getRandomInt(0, problems.length - 1)];
   const input = document.getElementById("cse-search-input-box-id");
   input.value = query;
@@ -209,7 +214,7 @@ function searchByGoogle(event) {
   event.preventDefault();
   const input = document.getElementById("cse-search-input-box-id");
   const element = google.search.cse.element.getElement("searchresults-only0");
-  changeProblem();
+  nextProblem();
   if (input.value == "") {
     element.clearAllResults();
   } else {

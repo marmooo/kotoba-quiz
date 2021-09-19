@@ -19,9 +19,9 @@ function unlockAudio(){correctAudio.volume=0;correctAudio.play();correctAudio.pa
 function getRandomInt(min,max){min=Math.ceil(min);max=Math.floor(max);return Math.floor(Math.random()*(max-min)+min);}
 function hideAnswer(){const node=document.getElementById("answer");node.classList.add("d-none");}
 function showAnswer(){const node=document.getElementById("answer");node.classList.remove("d-none");node.innerText=answer;}
-function changeProblem(){const[word,query]=problems[getRandomInt(0,problems.length-1)];const input=document.getElementById("cse-search-input-box-id");input.value=query;answer=word;hideAnswer();document.getElementById("wordLength").innerText=answer.length;if(localStorage.getItem("voice")==1){loopVoice();}else{speechSynthesis.cancel();}}
+function nextProblem(){const searchButton=document.getElementById("searchButton");searchButton.disabled=true;setTimeout(function(){searchButton.disabled=false;},2000);const[word,query]=problems[getRandomInt(0,problems.length-1)];const input=document.getElementById("cse-search-input-box-id");input.value=query;answer=word;hideAnswer();document.getElementById("wordLength").innerText=answer.length;if(localStorage.getItem("voice")==1){loopVoice();}else{speechSynthesis.cancel();}}
 function changeGrade(){const index=document.getElementById("levelOption").selectedIndex;const grade=(index==0)?"hira":"kana";fetch(grade+".lst").then((response)=>response.text()).then((tsv)=>{problems=[];tsv.split("\n").forEach((line)=>{const[word,query]=line.split("\t");problems.push([word,query]);});});}
-function searchByGoogle(event){event.preventDefault();const input=document.getElementById("cse-search-input-box-id");const element=google.search.cse.element.getElement("searchresults-only0");changeProblem();if(input.value==""){element.clearAllResults();}else{element.execute(input.value);}
+function searchByGoogle(event){event.preventDefault();const input=document.getElementById("cse-search-input-box-id");const element=google.search.cse.element.getElement("searchresults-only0");nextProblem();if(input.value==""){element.clearAllResults();}else{element.execute(input.value);}
 setTegakiPanel();if(firstRun){const gophers=document.getElementById("gophers");while(gophers.firstChild){gophers.removeChild(gophers.lastChild);}
 unlockAudio();firstRun=false;}
 return false;}
