@@ -114,7 +114,7 @@ function showPredictResult(canvas, result) {
       reply += " ";
     }
   }
-  document.getElementById("reply").innerText = reply;
+  document.getElementById("reply").textContent = reply;
   return reply;
 }
 
@@ -176,7 +176,7 @@ function hideAnswer() {
 function showAnswer() {
   const node = document.getElementById("answer");
   node.classList.remove("d-none");
-  node.innerText = answer;
+  node.textContent = answer;
 }
 
 function nextProblem() {
@@ -190,7 +190,7 @@ function nextProblem() {
   input.value = query;
   answer = word;
   hideAnswer();
-  document.getElementById("wordLength").innerText = answer.length;
+  document.getElementById("wordLength").textContent = answer.length;
   if (localStorage.getItem("voice") == 1) {
     loopVoice();
   } else {
