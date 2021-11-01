@@ -1,5 +1,5 @@
 const letters = Array.from(
-  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵー・、。",
+  "ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵー・、。",
 );
 
 function getAccuracyScores(imageData) {
@@ -28,7 +28,7 @@ function top2(arr) {
 
 function predict(imageData) {
   const scores = getAccuracyScores(imageData);
-  var [max1, max2] = top2(scores.slice(0, 235));
+  var [max1, max2] = top2(scores);
   var letter1 = letters[scores.indexOf(max1)];
   var letter2 = letters[scores.indexOf(max2)];
   return [letter1, letter2];
@@ -38,7 +38,7 @@ importScripts("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.9.0/dist/tf.min.j
 
 let model;
 (async () => {
-  model = await tf.loadLayersModel("model/model.json");
+  model = await tf.loadGraphModel("model/model.json");
 })();
 
 self.addEventListener("message", function (e) {
