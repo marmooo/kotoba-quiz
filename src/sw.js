@@ -1,4 +1,4 @@
-var CACHE_NAME = '2021-11-01 23:50';
+var CACHE_NAME = '2021-11-27 10:20';
 var urlsToCache = [
   "/kotoba-quiz/",
   "/kotoba-quiz/hira.lst",
@@ -9,9 +9,9 @@ var urlsToCache = [
   "/kotoba-quiz/model/group1-shard1of1.bin",
   "/kotoba-quiz/mp3/correct3.mp3",
   "/kotoba-quiz/favicon/original.svg",
-  "/kotoba-quiz/signature_pad.umd.min.js",
   "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
   "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.9.0/dist/tf.min.js",
+  "https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js",
 ];
 
 self.addEventListener("install", function (event) {
