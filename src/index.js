@@ -84,16 +84,13 @@ function setTegakiPanel() {
     const box = createTegakiBox();
     tegakiPanel.appendChild(box);
   }
+  // const boxes = tegakiPanel.getElementsByTagName("tegaki-box");
+  // canvases = [...boxes].map((box) => box.shadowRoot.querySelector("canvas"));
+  const boxes = tegakiPanel.children;
+  canvases = [...boxes].map((box) => box.querySelector("canvas"));
 }
 
 function showPredictResult(canvas, result) {
-  const tegakiPanel = document.getElementById("tegakiPanel");
-  if (!firstRun) {
-    // const boxes = tegakiPanel.getElementsByTagName("tegaki-box");
-    // canvases = [...boxes].map((box) => box.shadowRoot.querySelector("canvas"));
-    const boxes = tegakiPanel.children;
-    canvases = [...boxes].map((box) => box.querySelector("canvas"));
-  }
   const pos = canvases.indexOf(canvas);
   const answerWord = answer[pos];
   let matched = false;
