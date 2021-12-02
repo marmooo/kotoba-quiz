@@ -80,7 +80,8 @@ function setTegakiPanel() {
   }
   pads = [];
   for (let i = 0; i < answer.length; i++) {
-    const box = document.createElement("tegaki-box");
+    // const box = document.createElement("tegaki-box");
+    const box = createTegakiBox();
     tegakiPanel.appendChild(box);
   }
 }
@@ -88,8 +89,10 @@ function setTegakiPanel() {
 function showPredictResult(canvas, result) {
   const tegakiPanel = document.getElementById("tegakiPanel");
   if (!firstRun) {
-    const boxes = tegakiPanel.getElementsByTagName("tegaki-box");
-    canvases = [...boxes].map((box) => box.shadowRoot.querySelector("canvas"));
+    // const boxes = tegakiPanel.getElementsByTagName("tegaki-box");
+    // canvases = [...boxes].map((box) => box.shadowRoot.querySelector("canvas"));
+    const boxes = tegakiPanel.children;
+    canvases = [...boxes].map((box) => box.querySelector("canvas"));
   }
   const pos = canvases.indexOf(canvas);
   const answerWord = answer[pos];
@@ -251,6 +254,21 @@ customElements.define(
     }
   },
 );
+
+function createTegakiBox() {
+  const div = document.createElement("div");
+  const template = document.getElementById("tegaki-box").content.cloneNode(
+    true,
+  );
+  div.appendChild(template);
+  const canvas = div.querySelector("canvas");
+  const pad = initSignaturePad(canvas);
+  div.querySelector(".eraser").onclick = () => {
+    pad.clear();
+  };
+  pads.push(pad);
+  return div;
+}
 
 canvases.forEach((canvas) => {
   const pad = initSignaturePad(canvas);
