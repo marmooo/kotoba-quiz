@@ -1,12 +1,16 @@
+let endAudio, correctAudio;
+loadAudios();
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioContext = new AudioContext();
 const tegakiPanel = document.getElementById("tegakiPanel");
 let canvases = [...tegakiPanel.getElementsByTagName("canvas")];
-const correctAudio = new Audio("/kotoba-quiz/mp3/correct3.mp3");
 let pads = [];
 let problems = [];
 let answer = "ゴファー";
 let firstRun = true;
 const canvasCache = document.createElement("canvas").getContext("2d");
 let japaneseVoices = [];
+loadConfig();
 
 function loadConfig() {
   if (localStorage.getItem("darkMode") == 1) {
@@ -17,7 +21,6 @@ function loadConfig() {
     document.getElementById("voiceOff").classList.remove("d-none");
   }
 }
-loadConfig();
 
 function toggleDarkMode() {
   if (localStorage.getItem("darkMode") == 1) {
@@ -42,6 +45,50 @@ function toggleVoice() {
     unlockAudio();
     loopVoice();
   }
+}
+
+function playAudio(audioBuffer, volume) {
+  const audioSource = audioContext.createBufferSource();
+  audioSource.buffer = audioBuffer;
+  if (volume) {
+    const gainNode = audioContext.createGain();
+    gainNode.gain.value = volume;
+    gainNode.connect(audioContext.destination);
+    audioSource.connect(gainNode);
+    audioSource.start();
+  } else {
+    audioSource.connect(audioContext.destination);
+    audioSource.start();
+  }
+}
+
+function unlockAudio() {
+  audioContext.resume();
+}
+
+function loadAudio(url) {
+  return fetch(url)
+    .then((response) => response.arrayBuffer())
+    .then((arrayBuffer) => {
+      return new Promise((resolve, reject) => {
+        audioContext.decodeAudioData(arrayBuffer, (audioBuffer) => {
+          resolve(audioBuffer);
+        }, (err) => {
+          reject(err);
+        });
+      });
+    });
+}
+
+function loadAudios() {
+  promises = [
+    loadAudio("mp3/end.mp3"),
+    loadAudio("mp3/correct3.mp3"),
+  ];
+  Promise.all(promises).then((audioBuffers) => {
+    endAudio = audioBuffers[0];
+    correctAudio = audioBuffers[1];
+  });
 }
 
 function loadVoices() {
@@ -152,14 +199,6 @@ function predict(canvas) {
   const imageData = getImageData(canvas);
   const pos = canvases.indexOf(canvas);
   worker.postMessage({ imageData: imageData, pos: pos });
-}
-
-function unlockAudio() {
-  correctAudio.volume = 0;
-  correctAudio.play();
-  correctAudio.pause();
-  correctAudio.currentTime = 0;
-  correctAudio.volume = 1;
 }
 
 function getRandomInt(min, max) {
@@ -280,7 +319,7 @@ const worker = new Worker("worker.js");
 worker.addEventListener("message", function (e) {
   const reply = showPredictResult(canvases[e.data.pos], e.data.result);
   if (reply == answer) {
-    correctAudio.play();
+    playAudio(correctAudio);
   }
 });
 
