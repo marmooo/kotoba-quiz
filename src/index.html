@@ -32,6 +32,9 @@
     <meta name="theme-color" content="#ffffff">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <style>
+      #counter {
+        font-size:10rem; width:12rem; height:12rem; line-height:12rem; border-radius: 50%;
+        background:tomato; margin:auto; }
       canvas { width:140px; height:140px; border:solid 1px; }
       .eraser { display:block; margin:auto; cursor:pointer; }
       .card-header.ruby { padding: 1rem 1.25rem .5rem 1.25rem }
@@ -40,6 +43,7 @@
       html[data-theme="dark"] #gophers { filter: invert(1) hue-rotate(180deg); }
       html[data-theme="dark"] #___gcse_0 img { filter: invert(1) hue-rotate(180deg); }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" media="print" onload="this.media='all'">
   </head>
   <body>
     <header>
@@ -50,8 +54,9 @@
             ことばクイズ
           </a>
           <div class="navbar-nav">
-            <select id="levelOption" class="form-select form-select-sm" aria-label="問題の種類">
-              <option selected>ひらがな</option>
+            <button id="mode" class="btn btn-secondary btn-sm">EASY</button>
+            <select id="grade" class="form-select form-select-sm ms-1" aria-label="問題の種類">
+              <option>ひらがな</option>
               <option>カタカナ</option>
             </select>
             <button title="音声を自動再生" id="toggleVoice" class="btn p-0 ms-1">
@@ -67,61 +72,102 @@
       <noscript>
         <div class="alert alert-info text-center">JavaScript を ON にしてください</div>
       </noscript>
-      <p><ruby>画像<rp>(</rp><rt>がぞう</rt><rp>)</rp></ruby>から<ruby>英単語<rp>(</rp><rt>えいたんご</rt><rp>)</rp></ruby>を<ruby>当<rp>(</rp><rt>あ</rt><rp>)</rp></ruby>てるクイズです。
-        ｢これなあに？｣を<ruby>押<rp>(</rp><rt>お</rt><rp>)</rp></ruby>すとランダムにクイズを<ruby>出<rp>(</rp><rt>だ</rt><rp>)</rp></ruby>します。
-      </p>
-      <div class="text-center">
-        <div class="d-flex flex-wrap justify-content-center">
-          <form id="cse-search-box-form-id" class="pb-1">
-            <input type="hidden" value="学校" id="cse-search-input-box-id">
-            <input id="searchButton" type="submit" value="これなあに？" class="btn btn-primary btn-lg mx-1">
-          </form>
-          <div>
-            <button id="showAnswer" class="btn btn-secondary btn-lg mx-1">こたえ</button>
-          </div>
-        </div>
-        <div id="answer" class="d-none alert alert-info h5">ゴファー</div>
+      <div id="noTTS" class="alert alert-warning text-center d-none">
+        お使いのブラウザは音声読み上げに対応していません。Chrome / Safari をご利用ください。
       </div>
-      <div>
-        <div>ヒント (
-          <span id="wordLength">4</span><ruby>文字<rp>(</rp><rt>もじ</rt><rp>)</rp></ruby>):
-          <span id="reply" class="h5"></span>
-        </div>
-        <div id="tegakiPanel" class="d-flex justify-content-start pt-3 overflow-auto">
-          <div>
-            <canvas width="140" height="140"></canvas>
-            <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
-          </div>
-          <div>
-            <canvas width="140" height="140"></canvas>
-            <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
-          </div>
-          <div>
-            <canvas width="140" height="140"></canvas>
-            <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
-          </div>
-          <div>
-            <canvas width="140" height="140"></canvas>
-            <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
-          </div>
+      <div id="gameStart" class="text-center d-none">
+        <div id="countdown">
+          <div id="counter">3</div>
+          <img src="img/surfing-js.png" width="176" height="128" alt="surfing-js">
         </div>
       </div>
-      <div id="gophers" class="text-center pt-4">
-        <img src="img/animated-gopher.svg" width="128" height="128" alt="animated-gopher">
-        <img src="img/witch-cooking.png" width="119" height="128" alt="witch-cooking">
-        <img src="img/dancing-gopher.gif" width="128" height="128" alt="dancing-gopher">
-        <img src="img/hiking.png" width="158" height="128" alt="hiking">
+      <div id="scorePanel" class="text-center pb-3 d-none">
+        <h3 class="pt-3">
+          <ruby>結果<rp>(</rp><rt>けっか</rt><rp>)</rp></ruby>
+        </h3>
         <img src="img/surfing-js.png" width="176" height="128" alt="surfing-js">
-        <img src="img/witch-learning.png" width="170" height="128" alt="witch-learning">
-        <img src="img/umbrella.png" width="186" height="128" alt="umbrella">
-        <img src="img/messenger-red-letter.png" width="121" height="128" alt="messenger-red-letter">
-        <img src="img/robin-hood.png" width="95" height="128" alt="robin-hood">
-        <img src="img/gamer.png" width="122" height="128" alt="gamer">
+        <p>クリアしたのは・・・</p>
+        <div class="h2 pb-3">
+          <span id="score" class="h1">0</span>
+          <ruby>問<rp>(</rp><rt>もん</rt><rp>)</rp></ruby>！
+        </div>
+        <button id="restartButton" type="button" class="btn btn-primary btn-lg m-1">リスタート</button>
       </div>
-      <div class="gcse-searchresults-only"
-           data-defaultToImageSearch="true"
-           data-disableWebSearch="true"
-           data-resultSetSize="small"></div>
+      <div id="playPanel">
+        <div class="row">
+          <div class="col-sm">
+            <p><ruby>画像<rp>(</rp><rt>がぞう</rt><rp>)</rp></ruby>から<ruby>英単語<rp>(</rp><rt>えいたんご</rt><rp>)</rp></ruby>を<ruby>当<rp>(</rp><rt>あ</rt><rp>)</rp></ruby>てるクイズです。
+            ｢これなあに？｣を<ruby>押<rp>(</rp><rt>お</rt><rp>)</rp></ruby>すとランダムにクイズを<ruby>出<rp>(</rp><rt>だ</rt><rp>)</rp></ruby>します。
+            </p>
+          </div>
+          <div class="col-sm">
+            <div class="alert alert-info text-center">
+              <div class="h5">
+                <label><ruby>時間<rp>(</rp><rt>じかん</rt><rp>)</rp></ruby>:</label>
+                <span id="time" class="ms-1">180秒 / 180秒</span>
+              </div>
+              <button id="startButton" class="btn btn-primary btn-lg">スタート</button>
+            </div>
+          </div>
+        </div>
+        <div class="text-center">
+          <div class="d-flex flex-wrap justify-content-center">
+            <form id="cse-search-box-form-id" class="pb-1">
+              <input type="hidden" value="学校" id="cse-search-input-box-id">
+              <input id="searchButton" type="submit" value="これなあに？" class="btn btn-primary btn-lg mx-1">
+            </form>
+            <div>
+              <button id="showAnswer" class="btn btn-secondary btn-lg mx-1">こたえ</button>
+            </div>
+          </div>
+          <div class="text-center pt-3">
+            <button id="respeak" title="もう一度聴く" class="btn btn-outline-secondary btn-lg ms-1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="pt-3">
+          <div>ヒント (
+            <span id="wordLength">4</span><ruby>文字<rp>(</rp><rt>もじ</rt><rp>)</rp></ruby>):
+            <span id="reply" class="h3"></span>
+            <span id="answer" class="d-none h3 ps-1 text-secondary">ゴファー</span>
+          </div>
+          <div id="tegakiPanel" class="d-flex justify-content-start pt-3 overflow-auto">
+            <div>
+              <canvas width="140" height="140"></canvas>
+              <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
+            </div>
+            <div>
+              <canvas width="140" height="140"></canvas>
+              <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
+            </div>
+            <div>
+              <canvas width="140" height="140"></canvas>
+              <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
+            </div>
+            <div>
+              <canvas width="140" height="140"></canvas>
+              <img src="eraser.svg" width="32" height="32" alt="書き直し" class="eraser">
+            </div>
+          </div>
+        </div>
+        <div id="gophers" class="text-center pt-4">
+          <img src="img/animated-gopher.svg" width="128" height="128" alt="animated-gopher">
+          <img src="img/witch-cooking.png" width="119" height="128" alt="witch-cooking">
+          <img src="img/dancing-gopher.gif" width="128" height="128" alt="dancing-gopher">
+          <img src="img/hiking.png" width="158" height="128" alt="hiking">
+          <img src="img/surfing-js.png" width="176" height="128" alt="surfing-js">
+          <img src="img/witch-learning.png" width="170" height="128" alt="witch-learning">
+          <img src="img/umbrella.png" width="186" height="128" alt="umbrella">
+          <img src="img/messenger-red-letter.png" width="121" height="128" alt="messenger-red-letter">
+          <img src="img/robin-hood.png" width="95" height="128" alt="robin-hood">
+          <img src="img/gamer.png" width="122" height="128" alt="gamer">
+        </div>
+        <div class="gcse-searchresults-only"
+             data-defaultToImageSearch="true"
+             data-disableWebSearch="true"
+             data-resultSetSize="small"></div>
+      </div>
       <template id="tegaki-box">
         <style>
           canvas { width:140px; height:140px; border:solid 1px; }
