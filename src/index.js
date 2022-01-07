@@ -367,6 +367,34 @@ function createTegakiBox() {
   return div;
 }
 
+function kanaToHira(str) {
+    return str.replace(/[\u30a1-\u30f6]/g, function(match) {
+        var chr = match.charCodeAt(0) - 0x60;
+        return String.fromCharCode(chr);
+    });
+}
+
+function hiraToKana(str) {
+  return str.replace(/[\u3041-\u3096]/g, function (match) {
+    const chr = match.charCodeAt(0) + 0x60;
+    return String.fromCharCode(chr);
+  });
+}
+
+function formatReply(reply) {
+  // 「へべぺ」のひらがな/カタカナを見分けるのは困難
+  if (document.getElementById("grade").selectedIndex == 1) {  // kana
+    if (["へ", "べ", "ぺ"].includes(reply)) {
+      return hiraToKana(reply);
+    }
+  } else {
+    if (["ヘ", "ベ", "ペ"].includes(reply)) {
+      return kanaToHira(reply)
+    }
+  }
+  return reply;
+}
+
 canvases.forEach((canvas) => {
   const pad = initSignaturePad(canvas);
   pads.push(pad);
@@ -379,7 +407,7 @@ canvases.forEach((canvas) => {
 const worker = new Worker("worker.js");
 worker.addEventListener("message", function (e) {
   const reply = showPredictResult(canvases[e.data.pos], e.data.result);
-  if (reply == answer) {
+  if (answer == formatReply(reply)) {
     const noHint = document.getElementById("answer").classList.contains(
       "d-none",
     );
