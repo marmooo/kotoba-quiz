@@ -249,7 +249,7 @@ function initProblems() {
     .then((response) => response.text())
     .then((tsv) => {
       problems = [];
-      tsv.split("\n").forEach((line) => {
+      tsv.trimEnd().split("\n").forEach((line) => {
         const [word, query] = line.split("\t");
         problems.push([word, query]);
       });
