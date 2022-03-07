@@ -245,13 +245,15 @@ function nextProblem() {
 function initProblems() {
   const index = document.getElementById("grade").selectedIndex;
   const grade = (index == 0) ? "hira" : "kana";
-  fetch(grade + ".lst").then((response) => response.text()).then((tsv) => {
-    problems = [];
-    tsv.split("\n").forEach((line) => {
-      const [word, query] = line.split("\t");
-      problems.push([word, query]);
+  fetch(grade + ".lst")
+    .then((response) => response.text())
+    .then((tsv) => {
+      problems = [];
+      tsv.split("\n").forEach((line) => {
+        const [word, query] = line.split("\t");
+        problems.push([word, query]);
+      });
     });
-  });
 }
 
 function searchByGoogle(event) {
@@ -368,10 +370,10 @@ function createTegakiBox() {
 }
 
 function kanaToHira(str) {
-    return str.replace(/[\u30a1-\u30f6]/g, function(match) {
-        var chr = match.charCodeAt(0) - 0x60;
-        return String.fromCharCode(chr);
-    });
+  return str.replace(/[\u30a1-\u30f6]/g, function (match) {
+    var chr = match.charCodeAt(0) - 0x60;
+    return String.fromCharCode(chr);
+  });
 }
 
 function hiraToKana(str) {
@@ -383,13 +385,13 @@ function hiraToKana(str) {
 
 function formatReply(reply) {
   // 「へべぺ」のひらがな/カタカナを見分けるのは困難
-  if (document.getElementById("grade").selectedIndex == 1) {  // kana
+  if (document.getElementById("grade").selectedIndex == 1) { // kana
     if (["へ", "べ", "ぺ"].includes(reply)) {
       return hiraToKana(reply);
     }
   } else {
     if (["ヘ", "ベ", "ペ"].includes(reply)) {
-      return kanaToHira(reply)
+      return kanaToHira(reply);
     }
   }
   return reply;
