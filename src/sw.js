@@ -1,4 +1,4 @@
-var CACHE_NAME = '2022-04-23 08:06';
+var CACHE_NAME = '2022-05-01 08:30';
 var urlsToCache = [
   "/kotoba-quiz/",
   "/kotoba-quiz/hira.lst",
@@ -7,6 +7,7 @@ var urlsToCache = [
   "/kotoba-quiz/index.js",
   "/kotoba-quiz/model/model.json",
   "/kotoba-quiz/model/group1-shard1of1.bin",
+  "/kotoba-quiz/model/worker.js",
   "/kotoba-quiz/mp3/end.mp3",
   "/kotoba-quiz/mp3/correct3.mp3",
   "/kotoba-quiz/favicon/original.svg",
