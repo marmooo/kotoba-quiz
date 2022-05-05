@@ -1,18 +1,18 @@
-var CACHE_NAME = '2022-05-01 08:30';
+var CACHE_NAME = '2022-05-05 09:00';
 var urlsToCache = [
   "/kotoba-quiz/",
   "/kotoba-quiz/hira.lst",
   "/kotoba-quiz/kana.lst",
   "/kotoba-quiz/eraser.svg",
   "/kotoba-quiz/index.js",
+  "/kotoba-quiz/model/worker.js",
   "/kotoba-quiz/model/model.json",
   "/kotoba-quiz/model/group1-shard1of1.bin",
-  "/kotoba-quiz/model/worker.js",
   "/kotoba-quiz/mp3/end.mp3",
   "/kotoba-quiz/mp3/correct3.mp3",
-  "/kotoba-quiz/favicon/original.svg",
-  "https://cdn.jsdelivr.net/npm/signature_pad@4.0.4/dist/signature_pad.umd.min.js",
+  "/kotoba-quiz/favicon/favicon.svg",
   "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+  "https://cdn.jsdelivr.net/npm/signature_pad@4.0.4/dist/signature_pad.umd.min.js",
   "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.16.0/dist/tf.min.js",
   "https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css",
 ];

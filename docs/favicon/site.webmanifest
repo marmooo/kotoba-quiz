@@ -1,20 +1,20 @@
 {
-    "name": "\u3053\u3068\u3070\u30af\u30a4\u30ba",
-    "short_name": "\u3053\u3068\u3070\u30af\u30a4\u30ba",
-    "icons": [
-        {
-            "src": "/kotoba-quiz/favicon/android-chrome-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/kotoba-quiz/favicon/android-chrome-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
-    "start_url": "https://marmooo.github.io/kotoba-quiz/",
-    "display": "standalone"
+  "name": "ことばクイズ",
+  "short_name": "ことばクイズ",
+  "icons": [
+    {
+      "src": "/kotoba-quiz/favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/kotoba-quiz/favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "start_url": "https://marmooo.github.io/kotoba-quiz/",
+  "display": "standalone"
 }
