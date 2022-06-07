@@ -1,11 +1,11 @@
-var CACHE_NAME = "2022-06-07 23:10";
+var CACHE_NAME = "2022-06-07 23:25";
 var urlsToCache = [
   "/kotoba-quiz/",
   "/kotoba-quiz/hira.lst",
   "/kotoba-quiz/kana.lst",
   "/kotoba-quiz/eraser.svg",
   "/kotoba-quiz/index.js",
-  "/kotoba-quiz/model/worker.js",
+  "/kotoba-quiz/worker.js",
   "/kotoba-quiz/model/model.json",
   "/kotoba-quiz/model/group1-shard1of1.bin",
   "/kotoba-quiz/mp3/end.mp3",
