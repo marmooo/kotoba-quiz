@@ -44,7 +44,7 @@ function toggleVoice() {
     document.getElementById("voiceOn").classList.remove("d-none");
     document.getElementById("voiceOff").classList.add("d-none");
     unlockAudio();
-    loopVoice();
+    loopVoice(answer, 3);
   }
 }
 
@@ -111,9 +111,9 @@ function loadVoices() {
 }
 loadVoices();
 
-function loopVoice() {
+function loopVoice(text, n) {
   speechSynthesis.cancel();
-  const msg = new SpeechSynthesisUtterance(answer);
+  const msg = new SpeechSynthesisUtterance(text);
   msg.voice = japaneseVoices[Math.floor(Math.random() * japaneseVoices.length)];
   msg.lang = "ja-JP";
   for (let i = 0; i < 5; i++) {
@@ -122,7 +122,7 @@ function loopVoice() {
 }
 
 function respeak() {
-  loopVoice(answerEn, 1);
+  loopVoice(answer, 3);
 }
 
 function setTegakiPanel() {
@@ -233,10 +233,14 @@ function nextProblem() {
   const input = document.getElementById("cse-search-input-box-id");
   input.value = query;
   answer = word;
-  hideAnswer();
+  if (document.getElementById("mode").textContent == "EASY") {
+    showAnswer();
+  } else {
+    hideAnswer();
+  }
   document.getElementById("wordLength").textContent = answer.length;
   if (localStorage.getItem("voice") == 1) {
-    loopVoice();
+    loopVoice(answer, 3);
   } else {
     speechSynthesis.cancel();
   }
