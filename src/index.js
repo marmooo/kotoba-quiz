@@ -7,6 +7,7 @@ const gameTime = 180;
 let canvases = [...tegakiPanel.getElementsByTagName("canvas")];
 let pads = [];
 let problems = [];
+let answered = false;
 let answer = "ゴファー";
 let firstRun = true;
 const canvasCache = document.createElement("canvas").getContext("2d");
@@ -225,6 +226,7 @@ function showAnswer() {
 }
 
 function nextProblem() {
+  answered = false;
   const searchButton = document.getElementById("searchButton");
   searchButton.disabled = true;
   setTimeout(() => {
@@ -417,8 +419,10 @@ canvases.forEach((canvas) => {
 
 const worker = new Worker("worker.js");
 worker.addEventListener("message", (e) => {
+  if (answered) return;
   const reply = showPredictResult(canvases[e.data.pos], e.data.result);
   if (answer == formatReply(reply)) {
+    answered = true;
     if (document.getElementById("mode").textContent == "EASY") {
       correctCount += 1;
     } else {
