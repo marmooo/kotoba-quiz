@@ -40,7 +40,6 @@
         background:tomato; margin:auto; }
       canvas { width:140px; height:140px; border:solid 1px; }
       .eraser { display:block; margin:auto; cursor:pointer; }
-      .card-header.ruby { padding: 1rem 1.25rem .5rem 1.25rem }
       html[data-theme="dark"] { filter: invert(1) hue-rotate(180deg); }
       @-moz-document url-prefix() { html[data-theme="dark"] { background-color:black; } }
       html[data-theme="dark"] #gophers { filter: invert(1) hue-rotate(180deg); }
@@ -57,8 +56,7 @@
             ことばクイズ
           </a>
           <div class="navbar-nav">
-            <button id="mode" class="btn btn-secondary btn-sm">EASY</button>
-            <select title="コース" id="grade" class="form-select form-select-sm ms-1">
+            <select title="コース" id="grade" class="form-select form-select-sm">
               <option>ひらがな</option>
               <option>カタカナ</option>
             </select>
@@ -89,31 +87,33 @@ sudo apt install festival speech-dispatcher-festival</code></pre>
         </div>
       </div>
       <div id="scorePanel" class="text-center pb-3 d-none">
-        <h3 class="pt-3">
-          <ruby>結果<rp>(</rp><rt>けっか</rt><rp>)</rp></ruby>
-        </h3>
+        <h3 class="pt-3">スコア</h3>
         <img src="img/surfing-js.png" width="176" height="128" alt="surfing-js">
         <p>クリアしたのは・・・</p>
         <div class="h2 pb-3">
           <span id="score" class="h1">0</span>
-          <ruby>問<rp>(</rp><rt>もん</rt><rp>)</rp></ruby>！
         </div>
         <button id="restartButton" type="button" class="btn btn-primary btn-lg m-1">リスタート</button>
       </div>
       <div id="playPanel">
         <div class="row">
-          <div class="col-sm">
-            <p><ruby>画像<rp>(</rp><rt>がぞう</rt><rp>)</rp></ruby>から<ruby>英単語<rp>(</rp><rt>えいたんご</rt><rp>)</rp></ruby>を<ruby>当<rp>(</rp><rt>あ</rt><rp>)</rp></ruby>てるクイズです。
-            ｢これなあに？｣を<ruby>押<rp>(</rp><rt>お</rt><rp>)</rp></ruby>すとランダムにクイズを<ruby>出<rp>(</rp><rt>だ</rt><rp>)</rp></ruby>します。
+          <div class="col-md">
+            <p>画像から英単語を当てるクイズです。
+            ｢これなあに？｣を押すとランダムにクイズを出します。
             </p>
           </div>
-          <div class="col-sm">
-            <div class="alert alert-info text-center">
-              <div class="h5">
-                <label><ruby>時間<rp>(</rp><rt>じかん</rt><rp>)</rp></ruby>:</label>
-                <span id="time" class="ms-1">180秒 / 180秒</span>
+          <div class="col-md text-center">
+            <div class="alert alert-info">
+              <div class="d-flex flex-wrap justify-content-center">
+                <div class="h5 text-nowrap me-4 notranslate">
+                  <span id="time">180</span>
+                  <span> / 180 sec</span>
+                </div>
+                <button id="mode" class="btn btn-secondary btn-sm notranslate">EASY</button>
               </div>
-              <button id="startButton" class="btn btn-primary btn-lg">スタート</button>
+              <div class="mt-2">
+                <button id="startButton" class="btn btn-primary btn-lg">スタート</button>
+              </div>
             </div>
           </div>
         </div>
@@ -135,9 +135,9 @@ sudo apt install festival speech-dispatcher-festival</code></pre>
         </div>
         <div class="pt-3">
           <div>ヒント (
-            <span id="wordLength">4</span><ruby>文字<rp>(</rp><rt>もじ</rt><rp>)</rp></ruby>):
-            <span id="reply" class="h3"></span>
-            <span id="answer" class="d-none h3 ps-1 text-secondary">ゴファー</span>
+            <span id="wordLength" class="notranslate">6</span>文字 ):
+            <span id="reply" class="h3 ps-3 notranslate"></span>
+            <span id="answer" class="d-none h3 ps-1 text-secondary notranslate">ゴファー</span>
           </div>
           <div id="tegakiPanel" class="d-flex justify-content-start pt-3 overflow-auto">
             <div>

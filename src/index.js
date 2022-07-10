@@ -3,6 +3,7 @@ loadAudios();
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioContext = new AudioContext();
 const tegakiPanel = document.getElementById("tegakiPanel");
+const gameTime = 180;
 let canvases = [...tegakiPanel.getElementsByTagName("canvas")];
 let pads = [];
 let problems = [];
@@ -116,7 +117,7 @@ function loopVoice(text, n) {
   const msg = new SpeechSynthesisUtterance(text);
   msg.voice = japaneseVoices[Math.floor(Math.random() * japaneseVoices.length)];
   msg.lang = "ja-JP";
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < n; i++) {
     speechSynthesis.speak(msg);
   }
 }
@@ -226,13 +227,14 @@ function showAnswer() {
 function nextProblem() {
   const searchButton = document.getElementById("searchButton");
   searchButton.disabled = true;
-  setTimeout(function () {
+  setTimeout(() => {
     searchButton.disabled = false;
   }, 2000);
   const [word, query] = problems[getRandomInt(0, problems.length - 1)];
   const input = document.getElementById("cse-search-input-box-id");
   input.value = query;
   answer = word;
+  document.getElementById("reply").textContent = "";
   if (document.getElementById("mode").textContent == "EASY") {
     showAnswer();
   } else {
@@ -287,12 +289,11 @@ let gameTimer;
 function startGameTimer() {
   clearInterval(gameTimer);
   const timeNode = document.getElementById("time");
-  timeNode.textContent = "180秒 / 180秒";
-  gameTimer = setInterval(function () {
-    const arr = timeNode.textContent.split("秒 /");
-    const t = parseInt(arr[0]);
+  initTime();
+  gameTimer = setInterval(() => {
+    const t = parseInt(timeNode.textContent);
     if (t > 0) {
-      timeNode.textContent = (t - 1) + "秒 /" + arr[1];
+      timeNode.textContent = t - 1;
     } else {
       clearInterval(gameTimer);
       playAudio(endAudio);
@@ -311,7 +312,7 @@ function countdown() {
   scorePanel.classList.add("d-none");
   const counter = document.getElementById("counter");
   counter.textContent = 3;
-  countdownTimer = setInterval(function () {
+  countdownTimer = setInterval(() => {
     const colors = ["skyblue", "greenyellow", "violet", "tomato"];
     if (parseInt(counter.textContent) > 1) {
       const t = parseInt(counter.textContent) - 1;
@@ -329,6 +330,10 @@ function countdown() {
       startGameTimer();
     }
   }, 1000);
+}
+
+function initTime() {
+  document.getElementById("time").textContent = gameTime;
 }
 
 function changeMode() {
@@ -374,14 +379,14 @@ function createTegakiBox() {
 }
 
 function kanaToHira(str) {
-  return str.replace(/[\u30a1-\u30f6]/g, function (match) {
-    var chr = match.charCodeAt(0) - 0x60;
+  return str.replace(/[\u30a1-\u30f6]/g, (match) => {
+    const chr = match.charCodeAt(0) - 0x60;
     return String.fromCharCode(chr);
   });
 }
 
 function hiraToKana(str) {
-  return str.replace(/[\u3041-\u3096]/g, function (match) {
+  return str.replace(/[\u3041-\u3096]/g, (match) => {
     const chr = match.charCodeAt(0) + 0x60;
     return String.fromCharCode(chr);
   });
@@ -411,17 +416,18 @@ canvases.forEach((canvas) => {
 });
 
 const worker = new Worker("worker.js");
-worker.addEventListener("message", function (e) {
+worker.addEventListener("message", (e) => {
   const reply = showPredictResult(canvases[e.data.pos], e.data.result);
   if (answer == formatReply(reply)) {
-    const noHint = document.getElementById("answer").classList.contains(
-      "d-none",
-    );
-    if (noHint) {
+    if (document.getElementById("mode").textContent == "EASY") {
       correctCount += 1;
+    } else {
+      const node = document.getElementById("answer");
+      const noHint = node.classList.contains("d-none");
+      if (noHint) correctCount += 1;
     }
     playAudio(correctAudio);
-    document.getElementById("reply").textContent = "◯ " + answer;
+    document.getElementById("reply").textContent = "⭕ " + answer;
     document.getElementById("searchButton").classList.add("animate__heartBeat");
   }
 });
@@ -438,8 +444,8 @@ document.getElementById("showAnswer").onclick = showAnswer;
 document.getElementById("grade").onchange = initProblems;
 document.getElementById("searchButton").addEventListener(
   "animationend",
-  function () {
-    this.classList.remove("animate__heartBeat");
+  (e) => {
+    e.target.classList.remove("animate__heartBeat");
   },
 );
 document.addEventListener("click", unlockAudio, {
