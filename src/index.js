@@ -432,3 +432,14 @@ document.addEventListener("click", unlockAudio, {
   once: true,
   useCapture: true,
 });
+
+// disable troublesome iOS features
+if (/Macintosh/.test(navigator.userAgent)) {
+  // double tap zoom
+  document.ondblclick = (e) => {
+    e.preventDefault();
+  };
+  // selection context menu
+  // TODO: need better solution
+  document.body.style.webkitUserSelect = "none";
+}
