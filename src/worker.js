@@ -41,7 +41,7 @@ let model;
   model = await tf.loadGraphModel("model/model.json");
 })();
 
-self.addEventListener("message", function (e) {
+self.addEventListener("message", (e) => {
   e.data.result = predict(e.data.imageData);
   delete e.data.imageData;
   postMessage(e.data);
