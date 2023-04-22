@@ -10,7 +10,8 @@ let problems = [];
 let answered = false;
 let answer = "ゴファー";
 let firstRun = true;
-const canvasCache = document.createElement("canvas").getContext("2d");
+const canvasCache = document.createElement("canvas")
+  .getContext("2d", { willReadFrequently: true });
 let japaneseVoices = [];
 let correctCount = 0;
 loadConfig();
