@@ -101,7 +101,7 @@ function setTegakiPanel() {
   }
   pads = [];
   for (let i = 0; i < answer.length; i++) {
-    // const box = document.createElement("tegaki-box");
+    // const box = new TegakiBox();
     const box = createTegakiBox();
     tegakiPanel.appendChild(box);
   }
@@ -309,30 +309,27 @@ function changeMode(event) {
   }
 }
 
-customElements.define(
-  "tegaki-box",
-  class extends HTMLElement {
-    constructor() {
-      super();
-      const template = document.getElementById("tegaki-box").content.cloneNode(
-        true,
-      );
-      const canvas = template.querySelector("canvas");
-      const pad = initSignaturePad(canvas);
-      template.querySelector(".eraser").onclick = () => {
-        pad.clear();
-      };
-      pads.push(pad);
-      this.attachShadow({ mode: "open" }).appendChild(template);
-    }
-  },
-);
+
+class TegakiBox extends HTMLElement {
+  constructor() {
+    super();
+    const template = document.getElementById("tegaki-box")
+      .content.cloneNode(true);
+    const canvas = template.querySelector("canvas");
+    const pad = initSignaturePad(canvas);
+    template.querySelector(".eraser").onclick = () => {
+      pad.clear();
+    };
+    pads.push(pad);
+    this.attachShadow({ mode: "open" }).appendChild(template);
+  }
+}
+customElements.define("tegaki-box", TegakiBox);
 
 function createTegakiBox() {
   const div = document.createElement("div");
-  const template = document.getElementById("tegaki-box").content.cloneNode(
-    true,
-  );
+  const template = document.getElementById("tegaki-box")
+    .content.cloneNode(true);
   div.appendChild(template);
   const canvas = div.querySelector("canvas");
   const pad = initSignaturePad(canvas);
