@@ -309,7 +309,6 @@ function changeMode(event) {
   }
 }
 
-
 class TegakiBox extends HTMLElement {
   constructor() {
     super();
@@ -405,12 +404,10 @@ document.getElementById("restartButton").onclick = countdown;
 document.getElementById("startButton").onclick = countdown;
 document.getElementById("showAnswer").onclick = showAnswer;
 document.getElementById("grade").onchange = initProblems;
-document.getElementById("searchButton").addEventListener(
-  "animationend",
-  (e) => {
-    e.target.classList.remove("animate__heartBeat");
-  },
-);
+document.getElementById("searchButton")
+  .addEventListener("animationend", (event) => {
+    event.target.classList.remove("animate__heartBeat");
+  });
 document.addEventListener("click", unlockAudio, {
   once: true,
   useCapture: true,
