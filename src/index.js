@@ -1,6 +1,6 @@
 const tegakiPanel = document.getElementById("tegakiPanel");
 const canvasCache = document.createElement("canvas")
-  .getContext("2d", { willReadFrequently: true });
+  .getContext("2d", { alpha: false, willReadFrequently: true });
 let canvases = [...tegakiPanel.getElementsByTagName("canvas")];
 const gameTime = 180;
 let pads = [];
