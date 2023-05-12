@@ -301,11 +301,11 @@ function initTime() {
   document.getElementById("time").textContent = gameTime;
 }
 
-function changeMode() {
-  if (this.textContent == "EASY") {
-    this.textContent = "HARD";
+function changeMode(event) {
+  if (event.target.textContent == "EASY") {
+    event.target.textContent = "HARD";
   } else {
-    this.textContent = "EASY";
+    event.target.textContent = "EASY";
   }
 }
 
