@@ -1,3 +1,7 @@
+const playPanel = document.getElementById("playPanel");
+const infoPanel = document.getElementById("infoPanel");
+const countPanel = document.getElementById("countPanel");
+const scorePanel = document.getElementById("scorePanel");
 const tegakiPanel = document.getElementById("tegakiPanel");
 const canvasCache = document.createElement("canvas")
   .getContext("2d", { alpha: false, willReadFrequently: true });
@@ -272,7 +276,8 @@ function startGameTimer() {
 let countdownTimer;
 function countdown() {
   clearTimeout(countdownTimer);
-  gameStart.classList.remove("d-none");
+  countPanel.classList.remove("d-none");
+  infoPanel.classList.add("d-none");
   playPanel.classList.add("d-none");
   scorePanel.classList.add("d-none");
   const counter = document.getElementById("counter");
@@ -285,7 +290,8 @@ function countdown() {
       counter.textContent = t;
     } else {
       clearTimeout(countdownTimer);
-      gameStart.classList.add("d-none");
+      countPanel.classList.add("d-none");
+      infoPanel.classList.remove("d-none");
       playPanel.classList.remove("d-none");
       correctCount = 0;
       document.getElementById("score").textContent = correctCount;
