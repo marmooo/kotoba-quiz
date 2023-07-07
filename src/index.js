@@ -22,17 +22,24 @@ loadConfig();
 
 function loadConfig() {
   if (localStorage.getItem("darkMode") == 1) {
-    document.documentElement.dataset.theme = "dark";
+    document.documentElement.setAttribute("data-bs-theme", "dark");
   }
 }
 
+// TODO: :host-context() is not supportted by Safari/Firefox now
 function toggleDarkMode() {
   if (localStorage.getItem("darkMode") == 1) {
     localStorage.setItem("darkMode", 0);
-    delete document.documentElement.dataset.theme;
+    document.documentElement.setAttribute("data-bs-theme", "light");
+    // pads.forEach((pad) => {
+    //   pad.canvas.removeAttribute("style");
+    // });
   } else {
     localStorage.setItem("darkMode", 1);
-    document.documentElement.dataset.theme = "dark";
+    document.documentElement.setAttribute("data-bs-theme", "dark");
+    // pads.forEach((pad) => {
+    //   pad.canvas.setAttribute("style", "filter: invert(1) hue-rotate(180deg);");
+    // });
   }
 }
 
@@ -243,11 +250,8 @@ function searchByGoogle(event) {
   }
   setTegakiPanel();
   if (firstRun) {
-    const gophers = document.getElementById("gophers");
-    while (gophers.firstChild) {
-      gophers.removeChild(gophers.lastChild);
-    }
-    unlockAudio();
+    document.getElementById("gophers").replaceChildren();
+    document.getElementById("searchResults").classList.remove("d-none");
     firstRun = false;
   }
   return false;
@@ -318,15 +322,28 @@ function changeMode(event) {
 class TegakiBox extends HTMLElement {
   constructor() {
     super();
+    this.attachShadow({ mode: "open" });
+    this.shadowRoot.adoptedStyleSheets = [globalCSS];
+
     const template = document.getElementById("tegaki-box")
       .content.cloneNode(true);
-    const canvas = template.querySelector("canvas");
+    const use = template.querySelector("use");
+    const svgId = use.getAttribute("href").slice(1);
+    const data = document.getElementById(svgId).firstElementChild.cloneNode(true);
+    use.replaceWith(data);
+    this.shadowRoot.appendChild(template);
+
+    const canvas = this.shadowRoot.querySelector("canvas");
     const pad = initSignaturePad(canvas);
-    template.querySelector(".eraser").onclick = () => {
+    this.shadowRoot.querySelector(".eraser").onclick = () => {
       pad.clear();
     };
     pads.push(pad);
-    this.attachShadow({ mode: "open" }).appendChild(template);
+
+    if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
+      this.shadowRoot.querySelector("canvas")
+        .setAttribute("style", "filter: invert(1) hue-rotate(180deg);")
+    }
   }
 }
 customElements.define("tegaki-box", TegakiBox);
@@ -372,6 +389,24 @@ function formatReply(reply) {
   }
   return reply;
 }
+
+function getGlobalCSS() {
+  let cssText = "";
+  for (const stylesheet of document.styleSheets) {
+    try {
+      for (const rule of stylesheet.cssRules) {
+        cssText += rule.cssText;
+      }
+    } catch {
+      // skip cross-domain issue (Google Fonts)
+    }
+  }
+  const css = new CSSStyleSheet();
+  css.replaceSync(cssText);
+  return css;
+}
+
+const globalCSS = getGlobalCSS();
 
 canvases.forEach((canvas) => {
   const pad = initSignaturePad(canvas);
