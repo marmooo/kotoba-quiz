@@ -1,4 +1,4 @@
-var CACHE_NAME = "2023-07-29 10:17";
+var CACHE_NAME = "2023-08-05 01:00";
 var urlsToCache = [
   "/kotoba-quiz/",
   "/kotoba-quiz/hira.lst",
@@ -12,7 +12,7 @@ var urlsToCache = [
   "/kotoba-quiz/img/surfing-js.png",
   "/kotoba-quiz/favicon/favicon.svg",
   "https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js",
-  "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.9.0/dist/tf.min.js",
+  "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js",
   "https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css",
 ];
 
