@@ -1,4 +1,4 @@
-const CACHE_NAME = "2023-10-20 00:30";
+const CACHE_NAME = "2024-02-17 10:10";
 const urlsToCache = [
   "/kotoba-quiz/",
   "/kotoba-quiz/hira.lst",

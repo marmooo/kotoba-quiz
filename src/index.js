@@ -430,7 +430,7 @@ worker.addEventListener("message", (e) => {
       const noHint = node.classList.contains("d-none");
       if (noHint) correctCount += 1;
     }
-    playAudio("correct");
+    playAudio("correct", 0.3);
     document.getElementById("reply").textContent = "⭕ " + answer;
     document.getElementById("searchButton").classList.add("animate__heartBeat");
   }
