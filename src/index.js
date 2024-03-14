@@ -83,6 +83,11 @@ function loadVoices() {
         voices = speechSynthesis.getVoices();
         resolve(voices);
       });
+      setTimeout(() => {
+        if (!supported) {
+          document.getElementById("noTTS").classList.remove("d-none");
+        }
+      }, 1000);
     }
   });
   allVoicesObtained.then((voices) => {
