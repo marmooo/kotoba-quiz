@@ -79,7 +79,9 @@ function loadVoices() {
     if (voices.length !== 0) {
       resolve(voices);
     } else {
+      let supported = false;
       speechSynthesis.addEventListener("voiceschanged", () => {
+        supported = true;
         voices = speechSynthesis.getVoices();
         resolve(voices);
       });
