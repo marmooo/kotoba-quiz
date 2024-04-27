@@ -193,7 +193,7 @@ function getImageData(drawElement) {
 function predict(canvas) {
   const imageData = getImageData(canvas);
   const pos = canvases.indexOf(canvas);
-  worker.postMessage({ imageData: imageData, pos: pos });
+  worker.postMessage({ imageData, pos });
 }
 
 function getRandomInt(min, max) {
@@ -262,7 +262,7 @@ function searchByGoogle(event) {
   if (firstRun) {
     document.getElementById("gophers").replaceChildren();
     document.getElementById("searchResults").classList.remove("d-none");
-    predict(canvases[0]);
+    firstRun = false;
   }
   return false;
 }
@@ -431,29 +431,24 @@ canvases.forEach((canvas) => {
 
 const worker = new Worker("worker.js");
 worker.addEventListener("message", (event) => {
-  if (firstRun) {
-    firstRun = false;
-  } else {
-    if (answered) return;
-    const reply = showPredictResult(
-      canvases[event.data.pos],
-      event.data.result,
-    );
-    if (answer == formatReply(reply)) {
-      answered = true;
-      if (document.getElementById("mode").textContent == "EASY") {
-        correctCount += 1;
-      } else {
-        const node = document.getElementById("answer");
-        const noHint = node.classList.contains("d-none");
-        if (noHint) correctCount += 1;
-      }
-      playAudio("correct", 0.3);
-      document.getElementById("reply").textContent = "⭕ " + answer;
-      document.getElementById("searchButton").classList.add(
-        "animate__heartBeat",
-      );
+  const data = event.data;
+  if (pads[data.pos].toData().length == 0) return;
+  if (answered) return;
+  const reply = showPredictResult(canvases[data.pos], data.result);
+  if (answer == formatReply(reply)) {
+    answered = true;
+    if (document.getElementById("mode").textContent == "EASY") {
+      correctCount += 1;
+    } else {
+      const node = document.getElementById("answer");
+      const noHint = node.classList.contains("d-none");
+      if (noHint) correctCount += 1;
     }
+    playAudio("correct", 0.3);
+    document.getElementById("reply").textContent = "⭕ " + answer;
+    document.getElementById("searchButton").classList.add(
+      "animate__heartBeat",
+    );
   }
 });
 
@@ -470,6 +465,9 @@ document.getElementById("searchButton")
   .addEventListener("animationend", (event) => {
     event.target.classList.remove("animate__heartBeat");
   });
+document.addEventListener("pointerdown", () => {
+  predict(canvases[0]);
+}, { once: true });
 document.addEventListener("click", unlockAudio, {
   once: true,
   useCapture: true,
