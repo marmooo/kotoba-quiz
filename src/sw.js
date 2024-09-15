@@ -1,4 +1,4 @@
-const CACHE_NAME = "2024-08-31 10:16";
+const CACHE_NAME = "2024-09-15 13:27";
 const urlsToCache = [
   "/kotoba-quiz/",
   "/kotoba-quiz/hira.lst",
@@ -11,7 +11,7 @@ const urlsToCache = [
   "/kotoba-quiz/mp3/correct3.mp3",
   "/kotoba-quiz/img/surfing-js.png",
   "/kotoba-quiz/favicon/favicon.svg",
-  "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js",
+  "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.21.0/dist/tf.min.js",
   "https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css",
 ];
 
