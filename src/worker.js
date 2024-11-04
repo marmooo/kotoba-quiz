@@ -46,7 +46,7 @@ async function loadModelAndPredict(event) {
 }
 
 importScripts(
-  "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.21.0/dist/tf.min.js",
+  "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js",
 );
 
 let model;
