@@ -254,18 +254,16 @@ function nextProblem() {
   loopVoice(answer, 3);
 }
 
-function initProblems() {
+async function initProblems() {
   const index = document.getElementById("grade").selectedIndex;
   const grade = (index == 0) ? "hira" : "kana";
-  fetch(grade + ".lst")
-    .then((response) => response.text())
-    .then((tsv) => {
-      problems = [];
-      tsv.trimEnd().split("\n").forEach((line) => {
-        const [word, query] = line.split("\t");
-        problems.push([word, query]);
-      });
-    });
+  const response = await fetch(grade + ".lst");
+  const tsv = await response.text();
+  problems = [];
+  tsv.trimEnd().split("\n").forEach((line) => {
+    const [word, query] = line.split("\t");
+    problems.push([word, query]);
+  });
 }
 
 function searchByGoogle(event) {
@@ -471,7 +469,7 @@ worker.addEventListener("message", (event) => {
   }
 });
 
-initProblems();
+await initProblems();
 
 document.getElementById("mode").onclick = changeMode;
 document.getElementById("toggleDarkMode").onclick = toggleDarkMode;
