@@ -21,11 +21,7 @@
       gtag('config', 'G-F2179JXDYY');
     </script>
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/kotoba-quiz/sw.js');
-        });
-      }
+      navigator.serviceWorker.register("/kotoba-quiz/sw.js");
     </script>
     <script async src="https://cse.google.com/cse.js?cx=partner-pub-6459713332128733:7164795498"></script>
     <link rel="icon" type="image/png" href="/kotoba-quiz/favicon/favicon.png">
